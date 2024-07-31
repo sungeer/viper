@@ -20,7 +20,7 @@ class DevSettings(BaseSettings):
     httpx_max_overflow = 100
 
     # redis
-    redis_host = 'r-uf6kpl6xhzk3371ukp.redis.rds.aliyuncs.com'
-    redis_pass = 'GgE0/514s01efLf8mwTfY7btiWRe+73OXu+iF5T1yig='
+    redis_host = 'r-uf6kpl371ukp.redis.rds.aliyuncs.com'
+    redis_pass = 'GgE0/514s01eiWRe+73OXu+iF5T1yig='
     redis_port = 6379
     redis_db = 82
