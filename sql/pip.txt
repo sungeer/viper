@@ -1,0 +1,17 @@
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+python -m pip install aiomysql
+python -m pip install APScheduler
+python -m pip install bcrypt
+python -m pip install pyjwt
+python -m pip install websockets
+python -m pip install starlette
+python -m pip install gunicorn
+python -m pip install httpx
+python -m pip install python-dotenv
+python -m pip install python-multipart
+python -m pip install redis
+python -m pip install uvicorn
+python -m pip install pycryptodome
+python -m pip install aiofiles
