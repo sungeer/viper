@@ -1,6 +1,5 @@
-from starlette.responses import JSONResponse
-
-from touch.models.workflow import WorkflowModel
+from viper.models.workflow import WorkflowModel
+from viper.utils.tools import jsonify
 
 
 async def create_workflow(request):
@@ -10,4 +9,5 @@ async def create_workflow(request):
         'desc': data['desc']
     }
     workflow_id = await WorkflowModel().add_workflow(params)
-    return JSONResponse({'workflow_id': workflow_id})
+    data = {'workflow_id': workflow_id}
+    return jsonify(data)

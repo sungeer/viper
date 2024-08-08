@@ -1,4 +1,4 @@
-from touch.exts.db import creat_db_pool
+from viper.exts.db import creat_db_pool
 
 
 class BaseModel:

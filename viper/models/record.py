@@ -1,4 +1,4 @@
-from touch.models.base import BaseModel
+from viper.models.base import BaseModel
 
 
 class RecordModel(BaseModel):

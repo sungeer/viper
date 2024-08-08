@@ -1,7 +1,7 @@
 import redis.asyncio as redis
 
-from touch.configs import settings
-from touch.utils.cipher import cipher
+from viper.configs import settings
+from viper.utils.cipher import cipher
 
 redis_client = redis.Redis(
     host=settings.redis_host,

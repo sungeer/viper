@@ -6,8 +6,8 @@ from jwt.exceptions import ExpiredSignatureError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from vrm.configs import settings
-from vrm.exts.logger import logger
+from viper.configs import settings
+from viper.exts.logger import logger
 
 
 def set_password(password):

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from touch.models.base import BaseModel
+from viper.models.base import BaseModel
 
 
 class NodeModel(BaseModel):

@@ -5,8 +5,8 @@ from starlette.routing import Mount
 from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
-from touch.exts import db, https, redis, logs
-from touch.exts.logs import logger, stop_logger
+from viper.exts import db, https, redis, logs
+from viper.exts.logs import logger, stop_logger
 
 
 def create_app():

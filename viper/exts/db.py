@@ -1,7 +1,7 @@
 import aiomysql
 
-from touch.configs import settings
-from touch.utils.cipher import cipher
+from viper.configs import settings
+from viper.utils.cipher import cipher
 
 
 class BaseDB:

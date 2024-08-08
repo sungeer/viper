@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler, QueueHandler, QueueListener
 from datetime import datetime
 from queue import Queue
 
-from touch.configs import settings
+from viper.configs import settings
 
 
 def initialize_handlers():
