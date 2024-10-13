@@ -7,7 +7,7 @@ class ChatModel(BaseModel):
 
     async def add_chat(self, conversation_id, title, user_id):
         sql_str = '''
-            INSERT INTO chats (ConversationID, Title, UserID) 
+            INSERT INTO chats (conversation_id, title, user_id) 
             VALUES (%s, %s, %s)
         '''
         values = (conversation_id, title, user_id)
@@ -21,11 +21,11 @@ class ChatModel(BaseModel):
     async def get_chats(self, user_id):
         sql_str = '''
             SELECT
-                ID, ConversationID, Title, CreatedTime
+                id, conversation_id, title, created_time
             FROM
                 chats
             WHERE
-                UserID = %s
+                user_id = %s
             LIMIT 100
         '''
         await self.conn()
@@ -37,11 +37,11 @@ class ChatModel(BaseModel):
     async def get_chat_by_conversation(self, conversation_id):
         sql_str = '''
             SELECT 
-                ID, ConversationID, Title, CreatedTime
+                id, conversation_id, title, created_time
             FROM 
                 chats
             WHERE
-                ConversationID = %s
+                conversation_id = %s
         '''
         await self.conn()
         await self.execute(sql_str, (conversation_id,))

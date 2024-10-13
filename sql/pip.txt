@@ -13,3 +13,4 @@ python -m pip install pycryptodome
 python -m pip install cryptography
 python -m pip install redis
 python -m pip install gunicorn
+python -m pip install pydantic

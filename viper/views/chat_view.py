@@ -11,6 +11,7 @@ from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
 from viper.utils.log_util import logger
+from viper.decorators.auth_decorator import requires_auth
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -23,11 +24,8 @@ headers = {
 }
 
 
+@requires_auth
 async def get_chat_id(request):
-    user_id, error_code = await jwt_util.verify_token(request)
-    if not user_id:
-        return abort(error_code)
-
     body = await request.json()
     title = body.get('title')
     if not title:
@@ -43,16 +41,22 @@ async def get_chat_id(request):
         response = await httpx_common.post(url, headers=headers, json=data)
     except httpx.TimeoutException:
         return abort(504)
+
     try:
         response = response.json()
     except json.JSONDecodeError:
         return abort(502)
+
     data = response.get('data')
     if not data:
         return abort(502)
+
     conversation_id = data.get('conversation_id')
     if not conversation_id:
         return abort(502)
+
+    user = request.state.user
+    user_id = user['id']
     await ChatModel().add_chat(conversation_id, title, user_id)
     return jsonify(conversation_id)
 

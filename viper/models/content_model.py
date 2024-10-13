@@ -7,7 +7,7 @@ class ContentModel(BaseModel):
 
     async def add_content(self, message_id, content):
         sql_str = '''
-            INSERT INTO contents (MessageID, Content) 
+            INSERT INTO contents (message_id, content) 
             VALUES (%s, %s)
         '''
         await self.conn()

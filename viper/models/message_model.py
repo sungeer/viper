@@ -7,7 +7,7 @@ class MessageModel(BaseModel):
 
     async def add_message(self, chat_id, trace_id, sender):
         sql_str = '''
-            INSERT INTO messages (ChatID, TraceID, Sender) 
+            INSERT INTO messages (chat_id, trace_id, sender) 
             VALUES (%s, %s, %s)
         '''
         await self.conn()
@@ -20,24 +20,24 @@ class MessageModel(BaseModel):
     async def get_messages(self, chat_id):
         sql_str = '''
             SELECT
-                TraceID,
-                MAX(CASE WHEN Sender = 'user' THEN Content END) AS 问题,
-                MAX(CASE WHEN Sender = 'robot' THEN Content END) AS 回答,
-                MAX(CASE WHEN Sender = 'user' THEN CreatedTime END) AS 问题时间,
-                MAX(CASE WHEN Sender = 'robot' THEN CreatedTime END) AS 回答时间
+                trace_id,
+                MAX(CASE WHEN sender = 'user' THEN content END) AS 问题,
+                MAX(CASE WHEN sender = 'robot' THEN content END) AS 回答,
+                MAX(CASE WHEN sender = 'user' THEN created_time END) AS 问题时间,
+                MAX(CASE WHEN sender = 'robot' THEN created_time END) AS 回答时间
             FROM
                 (
                     SELECT
-                        M.TraceID, CT.Content, M.Sender, M.CreatedTime
+                        m.trace_id, ct.content, m.sender, m.created_time
                     FROM
-                        chats C
-                        LEFT JOIN messages M ON C.ID = M.ChatID
-                        LEFT JOIN contents CT ON M.ID = CT.MessageID
+                        chats c
+                        LEFT JOIN messages M ON c.id = m.chat_id
+                        LEFT JOIN contents CT ON m.id = ct.message_id
                     WHERE
-                        C.ConversationID = %s
+                        c.conversation_id = %s
                 ) AS subquery
             GROUP BY
-                TraceID
+                trace_id
             LIMIT 100;
         '''
         await self.conn()
