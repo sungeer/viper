@@ -1,8 +1,7 @@
 import json
 
 import httpx
-from fastapi import APIRouter
-from fastapi.responses import StreamingResponse
+from starlette.responses import StreamingResponse
 
 from viper.configs import settings
 from viper.utils.http_client import httpx_common, httpx_stream
@@ -12,8 +11,6 @@ from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
 from viper.utils.log_util import logger
-
-route = APIRouter(prefix='/chat')
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -26,7 +23,6 @@ headers = {
 }
 
 
-@route.post('/chat-id')
 async def get_chat_id(request):
     user_id, error_code = await jwt_util.verify_token(request)
     if not user_id:
@@ -106,7 +102,6 @@ async def stream_data(conversation_id, chat_id, trace_id, content):
     await ContentModel().add_content(message_id, content_str)
 
 
-@route.post('/send-message')
 async def send_message(request):
     user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
     if not user_id:
@@ -131,7 +126,7 @@ async def send_message(request):
     return StreamingResponse(stream_data(conversation_id, chat_id, trace_id, content), media_type='text/event-stream')
 
 
-@route.post('/chats')  # 所有会话
+# 所有会话
 async def get_chats(request):
     user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
     if not user_id:
@@ -141,7 +136,7 @@ async def get_chats(request):
     return jsonify(chats)
 
 
-@route.post('/messages')  # 所有问答
+# 所有问答
 async def get_messages(request):
     user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
     if not user_id:

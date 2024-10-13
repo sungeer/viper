@@ -1,13 +1,8 @@
-from fastapi import APIRouter
-
 from viper.models.user_model import UserModel
 from viper.utils.tools import jsonify, abort
 from viper.utils import jwt_util
 
-route = APIRouter(prefix='/user')
 
-
-@route.post('/get-access-token')
 async def get_access_token(request):
     body = await request.json()
     phone_number = body['phone_number']

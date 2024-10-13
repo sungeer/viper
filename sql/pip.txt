@@ -5,7 +5,7 @@ python -m pip install loguru
 python -m pip install aiomysql
 python -m pip install bcrypt
 python -m pip install pyjwt
-python -m pip install fastapi
+python -m pip install starlette
 python -m pip install httpx
 python -m pip install python-dotenv
 python -m pip install uvicorn

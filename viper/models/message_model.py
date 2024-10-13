@@ -7,18 +7,15 @@ class MessageModel(BaseModel):
 
     async def add_message(self, chat_id, trace_id, sender):
         sql_str = '''
-            INSERT INTO 
-                messages 
-                (ChatID, TraceID, Sender) 
-            VALUES 
-                (%s, %s, %s)
+            INSERT INTO messages (ChatID, TraceID, Sender) 
+            VALUES (%s, %s, %s)
         '''
         await self.conn()
         await self.execute(sql_str, (chat_id, trace_id, sender))
         await self.commit()
-        last_rowid = self.cursor.lastrowid
+        lastrowid = self.cursor.lastrowid
         await self.close()
-        return last_rowid
+        return lastrowid
 
     async def get_messages(self, chat_id):
         sql_str = '''

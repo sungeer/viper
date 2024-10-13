@@ -1,10 +1,10 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.exceptions import HTTPException
+from starlette.applications import Starlette
+from starlette.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException
 
 
 def create_app():
-    app = FastAPI()
+    app = Starlette()
 
     register_errors(app)
     register_events(app)
@@ -46,21 +46,20 @@ def register_errors(app):
     from viper.utils.tools import abort
 
     @app.exception_handler(HTTPException)
-    async def http_exception_handler(request: Request, exc):
-        # message = exc.detail
+    async def http_exception_handler(request, exc):
+        logger.opt(exception=True).warning(exc)
         return abort(exc.status_code)
 
     @app.exception_handler(Exception)
-    async def global_exception_handler(request: Request, exc):
+    async def global_exception_handler(request, exc):
         logger.exception(exc)
         return abort(500)
 
 
 def register_routers(app):
-    from viper.routers import chat_view
-    from viper.routers import user_view
-    app.include_router(chat_view.route)
-    app.include_router(user_view.route)
+    from viper.urls import chat_url, user_url
+    app.router.mount('/chat', chat_url.chat_url)
+    app.router.mount('/user', user_url.user_url)
 
 
 app = create_app()

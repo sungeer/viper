@@ -7,15 +7,12 @@ class ContentModel(BaseModel):
 
     async def add_content(self, message_id, content):
         sql_str = '''
-            INSERT INTO 
-                contents 
-                (MessageID, Content) 
-            VALUES 
-                (%s, %s)
+            INSERT INTO contents (MessageID, Content) 
+            VALUES (%s, %s)
         '''
         await self.conn()
         await self.execute(sql_str, (message_id, content))
         await self.commit()
-        last_rowid = self.cursor.lastrowid
+        lastrowid = self.cursor.lastrowid
         await self.close()
-        return last_rowid
+        return lastrowid

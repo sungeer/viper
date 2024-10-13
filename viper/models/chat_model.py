@@ -7,11 +7,8 @@ class ChatModel(BaseModel):
 
     async def add_chat(self, conversation_id, title, user_id):
         sql_str = '''
-            INSERT INTO 
-                chats 
-                (ConversationID, Title, UserID) 
-            VALUES 
-                (%s, %s, %s)
+            INSERT INTO chats (ConversationID, Title, UserID) 
+            VALUES (%s, %s, %s)
         '''
         values = (conversation_id, title, user_id)
         await self.conn()
