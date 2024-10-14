@@ -40,10 +40,6 @@ def register_middlewares(app):
         allow_headers=['*'],
     )
 
-    from viper.middlewares import auth_middleware
-
-    app.add_middleware(auth_middleware.AuthenticationMiddleware)
-
 
 def register_errors(app):
     from viper.utils.log_util import logger
