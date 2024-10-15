@@ -1,8 +1,7 @@
 from viper.models.user_model import UserModel
 from viper.utils.tools import jsonify, abort
 from viper.utils import jwt_util
-from viper.utils.validation_util import validate_data
-from viper.schemas.user_schema import access_token_schema
+from viper.utils.schemas import validate_data, access_token_schema
 
 
 async def get_access_token(request):

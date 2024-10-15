@@ -7,11 +7,11 @@ from viper.configs import settings
 from viper.utils.http_client import httpx_common, httpx_stream
 from viper.utils.tools import jsonify, abort
 from viper.utils import jwt_util, tools
+from viper.utils.log_util import logger
+from viper.utils.decorators import auth_required
 from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
-from viper.utils.log_util import logger
-from viper.decorators.auth_decorator import auth_required
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -56,7 +56,7 @@ async def get_chat_id(request):
         return abort(502)
 
     user = request.state.user
-    user_id = user['id']
+    user_id = user.id
     await ChatModel().add_chat(conversation_id, title, user_id)
     return jsonify(conversation_id)
 

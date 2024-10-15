@@ -23,7 +23,7 @@ class UserModel(BaseModel):
     async def get_user_by_id(self, user_id):
         sql_str = '''
             SELECT
-                id, name, phone, password_hash, is_admin, created_time
+                id, name, phone, is_admin, created_time
             FROM
                 users
             WHERE
