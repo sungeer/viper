@@ -5,9 +5,9 @@ from viper.utils import jwt_util
 from viper.models.user_model import UserModel
 
 
-def requires_auth(func):
+def auth_required(func):
     @wraps(func)
-    async def decorated_function(request, *args, **kwargs):
+    async def decorated(request, *args, **kwargs):
         user_id, _ = await jwt_util.verify_token(request)
         db_user = await UserModel().get_user_by_id(user_id)
         if not db_user:
@@ -15,4 +15,4 @@ def requires_auth(func):
         request.state.user = db_user
         return await func(request, *args, **kwargs)
 
-    return decorated_function
+    return decorated

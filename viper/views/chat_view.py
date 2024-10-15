@@ -11,7 +11,7 @@ from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
 from viper.utils.log_util import logger
-from viper.decorators.auth_decorator import requires_auth
+from viper.decorators.auth_decorator import auth_required
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -24,7 +24,7 @@ headers = {
 }
 
 
-@requires_auth
+@auth_required
 async def get_chat_id(request):
     body = await request.json()
     title = body.get('title')
