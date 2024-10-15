@@ -44,6 +44,12 @@ def register_middlewares(app):
 def register_errors(app):
     from viper.utils.log_util import logger
     from viper.utils.tools import abort
+    from viper.utils.errors import ValidationError
+
+    @app.exception_handler(ValidationError)
+    async def validation_exception_handler(request, exc: ValidationError):
+        logger.opt(exception=True).warning(exc)
+        return abort(422)
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request, exc):
