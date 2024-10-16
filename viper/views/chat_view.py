@@ -6,13 +6,13 @@ from starlette.responses import StreamingResponse
 from viper.configs import settings
 from viper.utils.http_client import httpx_common, httpx_stream
 from viper.utils.tools import jsonify, abort
-from viper.utils import jwt_util, tools
+from viper.utils import tools
 from viper.utils.log_util import logger
-from viper.utils.decorators import auth_required
+from viper.utils.decorators import auth_required, validate_request
 from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
-from viper.utils.schemas import validate_data, chat_id_schema, send_message_schema, get_messages_schema
+from viper.utils.schemas import chat_id_schema, send_message_schema, get_messages_schema
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -26,11 +26,9 @@ headers = {
 
 
 @auth_required
+@validate_request(chat_id_schema)
 async def get_chat_id(request):
     body = await request.json()
-
-    validate_data(body, chat_id_schema)
-
     title = body.get('title')
 
     url = f'{settings.ai_url}/v1/oapi/agent/chat/conversation/create'
@@ -96,11 +94,9 @@ async def stream_data(conversation_id, chat_id, trace_id, content):
 
 
 @auth_required
+@validate_request(send_message_schema)
 async def send_message(request):
     body = await request.json()
-
-    validate_data(body, send_message_schema)
-
     conversation_id = body.get('conversation_id')
     content = body.get('content')
 
@@ -125,11 +121,9 @@ async def get_chats(request):
 
 # 所有问答
 @auth_required
+@validate_request(get_messages_schema)
 async def get_messages(request):
     body = await request.json()
-
-    validate_data(body, get_messages_schema)
-
     conversation_id = body.get('conversation_id')
 
     chats = await MessageModel().get_messages(conversation_id)

@@ -2,8 +2,8 @@ from functools import wraps
 
 from viper.utils.tools import abort
 from viper.utils import jwt_util
+from viper.utils.schemas import User, validate_data
 from viper.models.user_model import UserModel
-from viper.utils.schemas import User
 
 
 def auth_required(func):
@@ -17,3 +17,16 @@ def auth_required(func):
         return await func(request, *args, **kwargs)
 
     return decorated
+
+
+def validate_request(schema):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(request, *args, **kwargs):
+            data = await request.json()
+            validate_data(data, schema)
+            return await func(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator

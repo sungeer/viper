@@ -1,14 +1,13 @@
 from viper.models.user_model import UserModel
 from viper.utils.tools import jsonify, abort
 from viper.utils import jwt_util
-from viper.utils.schemas import validate_data, access_token_schema
+from viper.utils.schemas import access_token_schema
+from viper.utils.decorators import validate_request
 
 
+@validate_request(access_token_schema)
 async def get_access_token(request):
     body = await request.json()
-
-    validate_data(body, access_token_schema)
-
     phone_number = body['phone_number']
     password = body['password']
 
