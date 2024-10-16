@@ -12,6 +12,7 @@ from viper.utils.decorators import auth_required
 from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
+from viper.utils.schemas import validate_data, chat_id_schema, send_message_schema, get_messages_schema
 
 api_key = settings.ai_api_key
 workspace_id = settings.ai_workspace_id
@@ -27,9 +28,10 @@ headers = {
 @auth_required
 async def get_chat_id(request):
     body = await request.json()
+
+    validate_data(body, chat_id_schema)
+
     title = body.get('title')
-    if not title:
-        return abort(404)
 
     url = f'{settings.ai_url}/v1/oapi/agent/chat/conversation/create'
     data = {
@@ -37,23 +39,10 @@ async def get_chat_id(request):
         'user': 'wangxun',
         'title': title
     }
-    try:
-        response = await httpx_common.post(url, headers=headers, json=data)
-    except httpx.TimeoutException:
-        return abort(504)
-
-    try:
-        response = response.json()
-    except json.JSONDecodeError:
-        return abort(502)
-
+    response = await httpx_common.post(url, headers=headers, json=data)
+    response = response.json()
     data = response.get('data')
-    if not data:
-        return abort(502)
-
     conversation_id = data.get('conversation_id')
-    if not conversation_id:
-        return abort(502)
 
     user = request.state.user
     user_id = user.id
@@ -106,24 +95,19 @@ async def stream_data(conversation_id, chat_id, trace_id, content):
     await ContentModel().add_content(message_id, content_str)
 
 
+@auth_required
 async def send_message(request):
-    user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
-    if not user_id:
-        return abort(error_code)
-
     body = await request.json()
 
-    conversation_id = body.get('conversation_id')
-    if not conversation_id:
-        return abort(400)
+    validate_data(body, send_message_schema)
 
+    conversation_id = body.get('conversation_id')
     content = body.get('content')
-    if not content:
-        return abort(400)
 
     trace_id = tools.generate_uuid()
     chat_info = await ChatModel().get_chat_by_conversation(conversation_id)
     chat_id = chat_info['ID']
+
     message_id = await MessageModel().add_message(chat_id, trace_id, 'user')
     await ContentModel().add_content(message_id, content)
 
@@ -131,25 +115,22 @@ async def send_message(request):
 
 
 # 所有会话
+@auth_required
 async def get_chats(request):
-    user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
-    if not user_id:
-        return abort(error_code)
-
+    user = request.state.user
+    user_id = user.id
     chats = await ChatModel().get_chats(user_id)
     return jsonify(chats)
 
 
 # 所有问答
+@auth_required
 async def get_messages(request):
-    user_id, error_code = await jwt_util.verify_token(request)  # 用户鉴权
-    if not user_id:
-        return abort(error_code)
-
     body = await request.json()
+
+    validate_data(body, get_messages_schema)
+
     conversation_id = body.get('conversation_id')
-    if not conversation_id:
-        return abort(400)
 
     chats = await MessageModel().get_messages(conversation_id)
     return jsonify(chats)

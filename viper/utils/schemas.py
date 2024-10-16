@@ -7,7 +7,7 @@ from viper.utils.errors import ValidationError
 
 
 @dataclass
-class UserSchema:
+class User:
     id: int
     name: str
     phone: str
@@ -35,5 +35,35 @@ access_token_schema = {
         'type': 'string',
         'minlength': 6,
         'required': True
+    }
+}
+
+chat_id_schema = {
+    'title': {
+        'type': 'string',
+        'required': True,  # 必填
+        'maxlength': 20,
+        'empty': False  # 字符串不能为空
+    }
+}
+
+send_message_schema = {
+    'conversation_id': {
+        'type': 'string',
+        'required': True,
+        'empty': False
+    },
+    'content': {
+        'type': 'string',
+        'required': True,
+        'empty': False
+    }
+}
+
+get_messages_schema = {
+    'conversation_id': {
+        'type': 'string',
+        'required': True,
+        'empty': False
     }
 }

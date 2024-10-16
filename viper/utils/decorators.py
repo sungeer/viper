@@ -3,7 +3,7 @@ from functools import wraps
 from viper.utils.tools import abort
 from viper.utils import jwt_util
 from viper.models.user_model import UserModel
-from viper.utils.schemas import UserSchema
+from viper.utils.schemas import User
 
 
 def auth_required(func):
@@ -13,7 +13,7 @@ def auth_required(func):
         db_user = await UserModel().get_user_by_id(user_id)
         if not db_user:
             return abort(401)
-        request.state.user = UserSchema(**db_user)
+        request.state.user = User(**db_user)
         return await func(request, *args, **kwargs)
 
     return decorated
