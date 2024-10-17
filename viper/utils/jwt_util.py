@@ -34,7 +34,7 @@ def extract_uid(token: str):
     return user_id
 
 
-async def verify_token(request):
+def verify_token(request):
     authorization_header = request.headers.get('Authorization')
     if authorization_header and authorization_header.startswith('Bearer '):
         jwt_token = authorization_header[len('Bearer '):]
