@@ -1,18 +1,16 @@
-from dataclasses import dataclass
-from datetime import datetime
-
 from cerberus import Validator
 
 from viper.utils.errors import ValidationError
 
 
-@dataclass
 class User:
-    id: int
-    name: str
-    phone: str
-    created_time: datetime
-    is_admin: bool = False
+
+    def __init__(self, id, name, phone, created_time, is_admin):
+        self.id = id
+        self.name = name
+        self.phone = phone
+        self.created_time = created_time  # datetime
+        self.is_admin = is_admin  # bool
 
 
 def validate_data(data, schema):
