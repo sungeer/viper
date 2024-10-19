@@ -6,6 +6,7 @@ from decimal import Decimal
 from http import HTTPStatus
 
 from starlette.responses import JSONResponse
+from starlette.exceptions import HTTPException
 
 
 class BaseResponse:
@@ -53,7 +54,7 @@ def jsonify(*args, **kwargs):
     return JsonExtendResponse(response)
 
 
-def abort(error_code, message=None):
+def jsonify_exc(error_code, message=None):
     if not message:
         message = HTTPStatus(error_code).phrase
     response = BaseResponse()
@@ -62,6 +63,10 @@ def abort(error_code, message=None):
     response.message = message
     response = response.to_dict()
     return JsonExtendResponse(response)
+
+
+def abort(error_code, message=None):
+    raise HTTPException(status_code=error_code, detail=message)
 
 
 def dict_to_json(data):

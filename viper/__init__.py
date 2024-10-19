@@ -43,23 +43,23 @@ def register_middlewares(app):
 
 def register_errors(app):
     from viper.utils.log_util import logger
-    from viper.utils.tools import abort
+    from viper.utils.tools import jsonify_exc
     from viper.utils.errors import ValidationError
 
     @app.exception_handler(ValidationError)
     async def validation_exception_handler(request, exc: ValidationError):
         logger.opt(exception=True).warning(exc)
-        return abort(422)
+        return jsonify_exc(422, exc.detail)
 
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request, exc):
         logger.opt(exception=True).warning(exc)
-        return abort(exc.status_code)
+        return jsonify_exc(exc.status_code, exc.detail)
 
     @app.exception_handler(Exception)
     async def global_exception_handler(request, exc):
         logger.exception(exc)
-        return abort(500)
+        return jsonify_exc(500)
 
 
 def register_routers(app):

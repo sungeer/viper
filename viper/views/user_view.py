@@ -13,12 +13,12 @@ async def get_access_token(request):
 
     user_info = await UserModel().get_user_by_phone(phone_number)
     if not user_info:
-        return abort(403)
+        return abort(404, 'User not found')
 
     db_password = user_info['password_hash']
     is_pwd = jwt_util.validate_password(password, db_password)
     if not is_pwd:
-        return abort(403)
+        return abort(403, 'Incorrect password')
 
     access_token = jwt_util.generate_token({'id': user_info['id']})
     jwt_token = {'access_token': access_token, 'token_type': 'bearer'}
