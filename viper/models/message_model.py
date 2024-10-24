@@ -7,8 +7,11 @@ class MessageModel(BaseModel):
 
     async def add_message(self, chat_id, trace_id, sender):
         sql_str = '''
-            INSERT INTO messages (chat_id, trace_id, sender) 
-            VALUES (%s, %s, %s)
+            INSERT INTO 
+                messages 
+                (chat_id, trace_id, sender) 
+            VALUES 
+                (%s, %s, %s)
         '''
         await self.conn()
         await self.execute(sql_str, (chat_id, trace_id, sender))

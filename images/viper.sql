@@ -3,12 +3,12 @@ CREATE TABLE users (
     id INT(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
     name VARCHAR(100) NOT NULL COMMENT '姓名',
     phone VARCHAR(20) NOT NULL COMMENT '手机',
-    passwordHash VARCHAR(255) NOT NULL COMMENT '密码哈希',
+    password_hash VARCHAR(255) NOT NULL COMMENT '密码哈希',
     is_admin TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否管理员',
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 
     PRIMARY KEY (id) USING BTREE,
-    UNIQUE KEY phone (phone),
+    UNIQUE KEY uniq_phone (phone),
     INDEX idx_created_time (created_time) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户';
 
