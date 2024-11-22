@@ -18,7 +18,13 @@ class BaseResponse:
         self.data = None
 
     def to_dict(self):
-        return self.__dict__
+        resp_dict = {
+            'status': self.status,
+            'error_code': self.error_code,
+            'message': self.message,
+            'data': self.data
+        }
+        return resp_dict
 
 
 class JsonExtendEncoder(json.JSONEncoder):
@@ -38,7 +44,7 @@ class JsonExtendEncoder(json.JSONEncoder):
 class JsonExtendResponse(JSONResponse):
 
     def render(self, content):
-        return json.dumps(content, cls=JsonExtendEncoder).encode('utf-8')
+        return json.dumps(content, cls=JsonExtendEncoder, ensure_ascii=False).encode('utf-8')
 
 
 def jsonify(*args, **kwargs):
@@ -72,11 +78,7 @@ def abort(error_code, message=None):
 def dict_to_json(data):
     if not data:
         data = {}
-    return json.dumps(data, cls=JsonExtendEncoder)
-
-
-def dict_to_json_ea(data=None):
-    return json.dumps(data, cls=JsonExtendEncoder, ensure_ascii=False, indent=4)
+    return json.dumps(data, cls=JsonExtendEncoder, ensure_ascii=False)
 
 
 def json_to_dict(json_data):
