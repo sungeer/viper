@@ -4,9 +4,9 @@ import httpx
 from starlette.responses import StreamingResponse
 
 from viper.configs import settings
+from viper.utils import tools
 from viper.utils.http_client import httpx_common, httpx_stream
 from viper.utils.tools import jsonify, abort
-from viper.utils import tools
 from viper.utils.log_util import logger
 from viper.utils.decorators import auth_required, validate_request
 from viper.models.chat_model import ChatModel
@@ -14,14 +14,10 @@ from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
 from viper.utils.schemas import chat_id_schema, send_message_schema, get_messages_schema
 
-api_key = settings.ai_api_key
-workspace_id = settings.ai_workspace_id
-robot_id = settings.ai_robot_id
-
 headers = {
     'Content-Type': 'application/json',
-    'Access-key': api_key,
-    'Workspace-Id': workspace_id
+    'Access-key': settings.ai_api_key,
+    'Workspace-Id': settings.ai_workspace_id
 }
 
 
@@ -33,7 +29,7 @@ async def get_chat_id(request):
 
     url = f'{settings.ai_url}/v1/oapi/agent/chat/conversation/create'
     data = {
-        'robot_id': robot_id,
+        'robot_id': settings.ai_robot_id,
         'user': 'wangxun',
         'title': title
     }
@@ -51,7 +47,7 @@ async def get_chat_id(request):
 async def get_response(conversation_id, content):
     url = f'{settings.ai_url}/v1/oapi/agent/chat'
     data = {
-        'robot_id': robot_id,
+        'robot_id': settings.ai_robot_id,
         'conversation_id': conversation_id,
         'content': content,
         'response_mode': 'streaming'

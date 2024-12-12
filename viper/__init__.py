@@ -2,6 +2,13 @@ from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException
 
+from viper.utils import http_client, redis_util
+from viper.utils.db_util import db
+from viper.utils.log_util import logger
+from viper.utils.tools import jsonify_exc
+from viper.utils.errors import ValidationError
+from viper.urls import chat_url, user_url
+
 
 def create_app():
     app = Starlette()
@@ -14,8 +21,6 @@ def create_app():
 
 
 def register_events(app):
-    from viper.utils.db_util import db
-
     @app.on_event('startup')
     async def startup():
         await db.connect()
@@ -23,11 +28,7 @@ def register_events(app):
     @app.on_event('shutdown')
     async def shutdown():
         await db.disconnect()
-
-        from viper.utils import http_client
         await http_client.close_httpx()
-
-        from viper.utils import redis_util
         await redis_util.close_redis()
 
 
@@ -42,10 +43,6 @@ def register_middlewares(app):
 
 
 def register_errors(app):
-    from viper.utils.log_util import logger
-    from viper.utils.tools import jsonify_exc
-    from viper.utils.errors import ValidationError
-
     @app.exception_handler(ValidationError)
     async def validation_exception_handler(request, exc: ValidationError):
         logger.opt(exception=True).warning(exc)
@@ -63,7 +60,6 @@ def register_errors(app):
 
 
 def register_routers(app):
-    from viper.urls import chat_url, user_url
     app.router.mount('/chat', chat_url.chat_url)
     app.router.mount('/user', user_url.user_url)
 
