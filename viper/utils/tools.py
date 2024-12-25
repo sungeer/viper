@@ -86,10 +86,11 @@ def json_to_dict(json_data):
 
 
 def generate_uuid():
-    random_uuid = str(uuid.uuid4())
-    md5 = hashlib.md5()
-    md5.update(random_uuid.encode('utf-8'))
-    return md5.hexdigest().lower()
+    random_uuid = uuid.uuid4()
+    uuid_str = str(random_uuid)
+    md5_hash = hashlib.md5()
+    md5_hash.update(uuid_str.encode())  # type: ignore
+    return md5_hash.hexdigest()  # result is lower
 
 
 def current_time():

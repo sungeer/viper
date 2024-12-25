@@ -44,7 +44,7 @@ def register_middlewares(app):
 
 def register_errors(app):
     @app.exception_handler(ValidationError)
-    async def validation_exception_handler(request, exc: ValidationError):
+    async def validation_exception_handler(request, exc):
         logger.opt(exception=True).warning(exc)
         return jsonify_exc(422, exc.detail)
 
