@@ -35,7 +35,7 @@ def register_events(app):
 def register_middlewares(app):
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=['127.0.0.1'],
+        allow_origins=['http://127.0.0.1'],  # ['*'] 允许所有来源
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*'],
@@ -60,8 +60,8 @@ def register_errors(app):
 
 
 def register_routers(app):
-    app.router.mount('/chat', chat_url.chat_url)
-    app.router.mount('/user', user_url.user_url)
+    app.mount('/chat', chat_url.chat_url)
+    app.mount('/user', user_url.user_url)
 
 
 app = create_app()
