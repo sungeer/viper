@@ -18,7 +18,7 @@ class BaseDB:
                 password=settings.db_pass,  # cipher.decrypt(settings.db_pass)
                 minsize=settings.db_pool_size,
                 maxsize=settings.db_max_overflow,
-                pool_recycle=3600,
+                pool_recycle=1800,
                 charset='utf8mb4',
                 cursorclass=aiomysql.DictCursor
             )
@@ -39,10 +39,6 @@ class BaseDB:
             cls._pool.close()
             await cls._pool.wait_closed()
             cls._pool = None
-
-    @property
-    def pool(self):
-        return self.__class__._pool
 
 
 db = BaseDB()
