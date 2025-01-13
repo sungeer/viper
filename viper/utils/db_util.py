@@ -40,5 +40,15 @@ class BaseDB:
             await cls._pool.wait_closed()
             cls._pool = None
 
+    @property
+    def pool(self):
+        return self.__class__._pool
+
 
 db = BaseDB()
+
+
+async def creat_db_pool():
+    if db.pool is None:
+        await db.connect()
+    return db.pool
