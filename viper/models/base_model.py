@@ -1,50 +1,52 @@
-from viper.utils.db_util import db
+from viper.utils.db_util import create_dbconn
 
 
 class BaseModel:
-
     def __init__(self):
-        self._conn = None
         self.cursor = None
+        self._conn = None
 
-    async def conn(self):
+    def conn(self):
         if not self.cursor:
-            self._conn = await db.acquire()  # 获取连接
-            self.cursor = await self._conn.cursor()  # 获取游标
+            self._conn = create_dbconn()
+            self.cursor = self._conn.cursor()
 
-    async def rollback(self):
-        await self._conn.rollback()
+    def rollback(self):
+        self._conn.rollback()
 
-    async def close(self):
+    def commit(self):
+        try:
+            self._conn.commit()
+        except Exception:
+            self.rollback()
+            raise
+
+    def begin(self):
+        self._conn.begin()
+
+    def close(self):
         try:
             if self.cursor:
-                await self.cursor.execute('UNLOCK TABLES;')
-                await self.cursor.close()  # 关闭游标
+                self.cursor.execute('UNLOCK TABLES;')
+                self.cursor.close()
             if self._conn:
-                await db.release(self._conn)  # 连接放回连接池
+                self._conn.close()
         finally:
             self.cursor = None
             self._conn = None
 
-    async def commit(self):
+    def execute(self, sql_str, values=None):
         try:
-            await self._conn.commit()
+            self.cursor.execute(sql_str, values)
         except Exception:
-            await self.rollback()
+            self.rollback()
+            self.close()
             raise
 
-    async def execute(self, sql_str, values=None):
+    def executemany(self, sql_str, values=None):
         try:
-            await self.cursor.execute(sql_str, values)
+            self.cursor.executemany(sql_str, values)
         except Exception:
-            await self.rollback()
-            await self.close()
-            raise
-
-    async def executemany(self, sql_str, values=None):
-        try:
-            await self.cursor.executemany(sql_str, values)    # values is [tuple1, tuple2]
-        except Exception:
-            await self.rollback()
-            await self.close()
+            self.rollback()
+            self.close()
             raise
