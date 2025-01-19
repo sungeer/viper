@@ -1,11 +1,11 @@
-from datetime import datetime
-
 from viper.models.base_model import BaseModel
+from viper.utils.decorators import sync_to_async_db
 
 
+@sync_to_async_db
 class ContentModel(BaseModel):
 
-    async def add_content(self, message_id, content):
+    def add_content(self, message_id, content):
         sql_str = '''
             INSERT INTO 
                 contents 
@@ -13,9 +13,9 @@ class ContentModel(BaseModel):
             VALUES 
                 (%s, %s)
         '''
-        await self.conn()
-        await self.execute(sql_str, (message_id, content))
-        await self.commit()
-        lastrowid = self.cursor.lastrowid
-        await self.close()
-        return lastrowid
+        self.conn()
+        self.execute(sql_str, (message_id, content))
+        self.commit()
+        last_row_id = self.cursor.lastrowid
+        self.close()
+        return last_row_id

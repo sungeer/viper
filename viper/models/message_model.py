@@ -1,11 +1,11 @@
-from datetime import datetime
-
 from viper.models.base_model import BaseModel
+from viper.utils.decorators import sync_to_async_db
 
 
+@sync_to_async_db
 class MessageModel(BaseModel):
 
-    async def add_message(self, chat_id, trace_id, sender):
+    def add_message(self, chat_id, trace_id, sender):
         sql_str = '''
             INSERT INTO 
                 messages 
@@ -13,14 +13,14 @@ class MessageModel(BaseModel):
             VALUES 
                 (%s, %s, %s)
         '''
-        await self.conn()
-        await self.execute(sql_str, (chat_id, trace_id, sender))
-        await self.commit()
+        self.conn()
+        self.execute(sql_str, (chat_id, trace_id, sender))
+        self.commit()
         lastrowid = self.cursor.lastrowid
-        await self.close()
+        self.close()
         return lastrowid
 
-    async def get_messages(self, chat_id):
+    def get_messages(self, chat_id):
         sql_str = '''
             SELECT
                 trace_id,
@@ -43,8 +43,8 @@ class MessageModel(BaseModel):
                 trace_id
             LIMIT 100;
         '''
-        await self.conn()
-        await self.execute(sql_str, (chat_id,))
-        chats = await self.cursor.fetchall()
-        await self.close()
+        self.conn()
+        self.execute(sql_str, (chat_id,))
+        chats = self.cursor.fetchall()
+        self.close()
         return chats

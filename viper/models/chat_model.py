@@ -1,11 +1,11 @@
-from datetime import datetime
-
 from viper.models.base_model import BaseModel
+from viper.utils.decorators import sync_to_async_db
 
 
+@sync_to_async_db
 class ChatModel(BaseModel):
 
-    async def add_chat(self, conversation_id, title, user_id):
+    def add_chat(self, conversation_id, title, user_id):
         sql_str = '''
             INSERT INTO 
                 chats 
@@ -14,14 +14,14 @@ class ChatModel(BaseModel):
                 (%s, %s, %s)
         '''
         values = (conversation_id, title, user_id)
-        await self.conn()
-        await self.execute(sql_str, values)
-        await self.commit()
+        self.conn()
+        self.execute(sql_str, values)
+        self.commit()
         lastrowid = self.cursor.lastrowid
-        await self.close()
+        self.close()
         return lastrowid
 
-    async def get_chats(self, user_id):
+    def get_chats(self, user_id):
         sql_str = '''
             SELECT
                 id, conversation_id, title, created_time
@@ -31,13 +31,13 @@ class ChatModel(BaseModel):
                 user_id = %s
             LIMIT 100
         '''
-        await self.conn()
-        await self.execute(sql_str, (user_id,))
-        chats = await self.cursor.fetchall()
-        await self.close()
+        self.conn()
+        self.execute(sql_str, (user_id,))
+        chats = self.cursor.fetchall()
+        self.close()
         return chats
 
-    async def get_chat_by_conversation(self, conversation_id):
+    def get_chat_by_conversation(self, conversation_id):
         sql_str = '''
             SELECT 
                 id, conversation_id, title, created_time
@@ -46,8 +46,8 @@ class ChatModel(BaseModel):
             WHERE
                 conversation_id = %s
         '''
-        await self.conn()
-        await self.execute(sql_str, (conversation_id,))
-        chat_info = await self.cursor.fetchone()
-        await self.close()
+        self.conn()
+        self.execute(sql_str, (conversation_id,))
+        chat_info = self.cursor.fetchone()
+        self.close()
         return chat_info

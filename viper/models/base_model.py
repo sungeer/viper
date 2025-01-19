@@ -2,6 +2,7 @@ from viper.utils.db_util import create_dbconn
 
 
 class BaseModel:
+
     def __init__(self):
         self.cursor = None
         self._conn = None
