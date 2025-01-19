@@ -1,7 +1,7 @@
 import redis.asyncio as redis
 
 from viper.configs import settings
-from viper.utils.cipher import cipher
+from viper.utils.pwd_util import cipher
 
 
 def redis_conn(host=settings.redis_host, port=6379, db=0, decode_responses=False):
