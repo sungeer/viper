@@ -5,7 +5,7 @@ from starlette.responses import StreamingResponse
 
 from viper.configs import settings
 from viper.utils import tools
-from viper.utils.http_client import httpx_common, httpx_stream
+from viper.utils.http_util import httpx_common, httpx_stream
 from viper.utils.tools import jsonify, abort
 from viper.utils.log_util import logger
 from viper.utils.decorators import auth_required, validate_request

@@ -7,15 +7,13 @@ python -m pip install loguru
 python -m pip install uvicorn
 python -m pip install mysqlclient
 python -m pip install DBUtils
+python -m pip install httpx
 
 
-python -m pip install aiomysql
 python -m pip install bcrypt
 python -m pip install pyjwt
-python -m pip install httpx
 python -m pip install python-dotenv
 python -m pip install pycryptodome
 python -m pip install cryptography
 python -m pip install redis
 python -m pip install gunicorn
-python -m pip install cerberus

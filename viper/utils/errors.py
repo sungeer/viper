@@ -1,5 +1,2 @@
-from starlette.exceptions import HTTPException
-
-
-class ValidationError(HTTPException):
+class ValidationError(Exception):
     pass

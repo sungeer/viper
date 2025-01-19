@@ -2,7 +2,7 @@ from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException
 
-from viper.utils import http_client, redis_util
+from viper.utils import http_util, redis_util
 from viper.utils.db_util import db
 from viper.utils.log_util import logger
 from viper.utils.tools import jsonify_exc
