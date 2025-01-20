@@ -41,7 +41,7 @@ async def get_chat_id(request):
 
     user = request.user
     user_id = user.id
-    await ChatModel().add_chat(conversation_id, title, user_id)
+    ChatModel().add_chat(conversation_id, title, user_id)
     return jsonify(conversation_id)
 
 
@@ -86,8 +86,8 @@ async def stream_data(conversation_id, chat_id, trace_id, content):
             yield f'{content}\n'
 
     content_str = ''.join(full_content) if full_content else 'error'
-    message_id = await MessageModel().add_message(chat_id, trace_id, 'robot')
-    await ContentModel().add_content(message_id, content_str)
+    message_id = MessageModel().add_message(chat_id, trace_id, 'robot')
+    ContentModel().add_content(message_id, content_str)
 
 
 @requires('authenticated')
@@ -98,11 +98,11 @@ async def send_message(request):
     content = body.get('content')
 
     trace_id = tools.generate_uuid()
-    chat_info = await ChatModel().get_chat_by_conversation(conversation_id)
+    chat_info = ChatModel().get_chat_by_conversation(conversation_id)
     chat_id = chat_info['ID']
 
-    message_id = await MessageModel().add_message(chat_id, trace_id, 'user')
-    await ContentModel().add_content(message_id, content)
+    message_id = MessageModel().add_message(chat_id, trace_id, 'user')
+    ContentModel().add_content(message_id, content)
 
     return StreamingResponse(stream_data(conversation_id, chat_id, trace_id, content), media_type='text/event-stream')
 
@@ -112,7 +112,7 @@ async def send_message(request):
 async def get_chats(request):
     user = request.user
     user_id = user.id
-    chats = await ChatModel().get_chats(user_id)
+    chats = ChatModel().get_chats(user_id)
     return jsonify(chats)
 
 
@@ -123,5 +123,5 @@ async def get_messages(request):
     body = await request.json()
     conversation_id = body.get('conversation_id')
 
-    chats = await MessageModel().get_messages(conversation_id)
+    chats = MessageModel().get_messages(conversation_id)
     return jsonify(chats)

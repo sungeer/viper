@@ -11,7 +11,7 @@ async def get_access_token(request):
     phone_number = body['phone_number']
     password = body['password']
 
-    db_user = await UserModel().get_user_by_phone(phone_number)
+    db_user = UserModel().get_user_by_phone(phone_number)
     if not db_user:
         return abort(404, 'User not found')
 
