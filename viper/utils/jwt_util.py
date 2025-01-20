@@ -6,6 +6,7 @@ from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from starlette.authentication import AuthenticationError
 
 from viper.configs import settings
+from viper.utils.errors import TokenExpiredError
 
 
 def set_password(password):
@@ -36,7 +37,7 @@ def verify_token(token: str):
         if not user_id:
             raise AuthenticationError('Invalid JWT: missing field id')
     except ExpiredSignatureError:
-        raise AuthenticationError('Token has expired')
+        raise TokenExpiredError('Token has expired')
     except InvalidTokenError as exc:
         raise AuthenticationError(f'Invalid token: {str(exc)}')
     return user_id

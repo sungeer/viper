@@ -4,12 +4,16 @@ from starlette.websockets import WebSocket
 
 from viper.utils.log_util import logger
 from viper.utils.resp_util import jsonify_exc
-from viper.utils.errors import ValidationError
+from viper.utils.errors import ValidationError, TokenExpiredError
 
 
 async def validation_exception_handler(request: Request, exc: ValidationError):
     logger.opt(exception=True).warning(exc)
     return jsonify_exc(422, exc.args)
+
+
+async def jwt_expired_exception_handler(request: Request, exc: TokenExpiredError):
+    return jsonify_exc(401, exc.args)
 
 
 async def http_exception_handler(request: Request, exc: HTTPException):
@@ -29,6 +33,7 @@ async def websocket_exception_handler(websocket: WebSocket, exc: WebSocketExcept
 
 register_errors = {
     ValidationError: validation_exception_handler,
+    TokenExpiredError: jwt_expired_exception_handler,
     HTTPException: http_exception_handler,
     WebSocketException: websocket_exception_handler,
     Exception: global_exception_handler,
