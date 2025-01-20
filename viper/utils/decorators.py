@@ -1,9 +1,7 @@
 from functools import wraps
 
 from viper.utils.resp_util import abort
-from viper.utils import jwt_util
 from viper.utils.schemas import validate_data
-from viper.models.user_model import UserModel
 from viper.utils.pools import run_in_thread_pool_db
 
 
