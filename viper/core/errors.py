@@ -1,5 +1,6 @@
 from starlette.requests import Request
-from starlette.exceptions import HTTPException
+from starlette.exceptions import HTTPException, WebSocketException
+from starlette.websockets import WebSocket
 
 from viper.utils.log_util import logger
 from viper.utils.resp_util import jsonify_exc
@@ -21,8 +22,13 @@ async def global_exception_handler(request: Request, exc: Exception):
     return jsonify_exc(500)
 
 
+async def websocket_exception_handler(websocket: WebSocket, exc: WebSocketException):
+    await websocket.close(code=1008)
+
+
 register_errors = {
     ValidationError: validation_exception_handler,
     HTTPException: http_exception_handler,
+    WebSocketException: websocket_exception_handler,
     Exception: global_exception_handler,
 }
