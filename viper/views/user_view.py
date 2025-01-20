@@ -1,5 +1,5 @@
 from viper.utils import jwt_util
-from viper.utils.tools import jsonify, abort
+from viper.utils.resp_util import jsonify, abort
 from viper.utils.schemas import access_token_schema
 from viper.utils.decorators import validate_request
 from viper.models.user_model import UserModel
@@ -20,6 +20,7 @@ async def get_access_token(request):
     if not is_pwd:
         return abort(403, 'Incorrect password')
 
-    access_token = jwt_util.generate_token({'id': db_user['id']})
+    user_id = db_user['id']
+    access_token = jwt_util.generate_token({'id': user_id})
     jwt_token = {'access_token': access_token, 'token_type': 'bearer'}
     return jsonify(jwt_token)

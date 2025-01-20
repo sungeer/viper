@@ -3,9 +3,9 @@ from datetime import datetime, timedelta
 import bcrypt  # python -m pip install bcrypt
 import jwt  # python -m pip install pyjwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from starlette.authentication import AuthenticationError
 
 from viper.configs import settings
-from viper.utils.log_util import logger
 
 
 def set_password(password):
@@ -26,39 +26,17 @@ def generate_token(data: dict):
     return encoded_token
 
 
-def extract_uid(token: str):
+def verify_token(token: str):
     secret_key = settings.jwt_secret_key
     jwt_algorithm = settings.jwt_algorithm
-    decoded_payload = jwt.decode(token, secret_key, algorithms=[jwt_algorithm])
-    user_id = decoded_payload.get('id')
-    return user_id
-
-
-def verify_token(request):
-    authorization_header = request.headers.get('Authorization')
-    if authorization_header and authorization_header.startswith('Bearer '):
-        jwt_token = authorization_header[len('Bearer '):]
-        if not jwt_token:
-            logger.warning('Token is empty.')
-            return None, 400
-    else:
-        logger.warning('Authorization header is missing or does not start with Bearer.')
-        return None, 400
 
     try:
-        user_id = extract_uid(jwt_token)
+        payload = jwt.decode(token, secret_key, algorithms=[jwt_algorithm])
+        user_id = payload.get('id')
+        if not user_id:
+            raise AuthenticationError('Invalid JWT: missing field id')
     except ExpiredSignatureError:
-        logger.opt(exception=True).warning('Token has expired.')
-        return None, 401
-    except InvalidTokenError:
-        logger.opt(exception=True).warning('Token is invalid.')
-        return None, 401
-    except (Exception,):
-        logger.opt(exception=True).error(f'Unexpected error.')
-        return None, 500
-
-    if not user_id:
-        logger.warning('User ID not found.')
-        return None, 404
-
-    return user_id, 200
+        raise AuthenticationError('Token has expired')
+    except InvalidTokenError as exc:
+        raise AuthenticationError(f'Invalid token: {str(exc)}')
+    return user_id

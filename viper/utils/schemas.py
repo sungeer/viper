@@ -3,16 +3,6 @@ from cerberus import Validator
 from viper.utils.errors import ValidationError
 
 
-class User:
-
-    def __init__(self, id, name, phone, created_time, is_admin):
-        self.id = id
-        self.name = name
-        self.phone = phone
-        self.created_time = created_time  # datetime
-        self.is_admin = is_admin  # bool
-
-
 def validate_data(data, schema):
     validator = Validator()
     is_valid = validator.validate(data, schema)

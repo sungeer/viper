@@ -2,22 +2,9 @@ from functools import wraps
 
 from viper.utils.resp_util import abort
 from viper.utils import jwt_util
-from viper.utils.schemas import User, validate_data
+from viper.utils.schemas import validate_data
 from viper.models.user_model import UserModel
 from viper.utils.pools import run_in_thread_pool_db
-
-
-def auth_required(func):
-    @wraps(func)
-    async def decorated_function(request, *args, **kwargs):
-        user_id, _ = jwt_util.verify_token(request)
-        db_user = await UserModel().get_user_by_id(user_id)
-        if not db_user:
-            return abort(401)
-        request.state.user = User(**db_user)
-        return await func(request, *args, **kwargs)
-
-    return decorated_function
 
 
 def validate_request(schema):
