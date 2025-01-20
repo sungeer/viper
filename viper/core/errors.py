@@ -23,6 +23,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 async def websocket_exception_handler(websocket: WebSocket, exc: WebSocketException):
+    logger.opt(exception=True).warning(exc)
     await websocket.close(code=1008)
 
 

@@ -8,20 +8,22 @@ from viper.configs import settings
 
 class AESCipher:
 
-    def __init__(self, key):
-        key_hex = key  # type(key) is string
-        key_bytes = bytes.fromhex(key_hex)  # bytes
+    def __init__(self, key: str):
+        key_hex = key
+        key_bytes = bytes.fromhex(key_hex)
         if len(key_bytes) not in (16, 24, 32):
             raise ValueError('sec_key is error')
         self.key = key_bytes
 
-    def encrypt(self, data):  # 加密
+    # 加密
+    def encrypt(self, data):
         cipher = AES.new(self.key, AES.MODE_ECB)
         ct_bytes = cipher.encrypt(pad(data.encode(), AES.block_size))
         ct = b64encode(ct_bytes).decode('utf-8')
         return ct
 
-    def decrypt(self, data):  # 解密
+    # 解密
+    def decrypt(self, data):
         ct = b64decode(data)
         cipher = AES.new(self.key, AES.MODE_ECB)
         pt = unpad(cipher.decrypt(ct), AES.block_size)
