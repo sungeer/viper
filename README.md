@@ -1,6 +1,32 @@
-# viper
-A simple chat interface inspired by ChatGPT.
+# Viper
 
-The project is named "viper" because it was written during the time when Typhoon Bebinca made landfall. Since I couldn't go anywhere and had nothing else to do, I stayed at home and completed the entire project in one afternoon.
+*A simple chat interface inspired by ChatGPT.*
 
-This project is built on the Starlette framework and can be considered a comprehensive backend project template. The main advantage is that it can be conveniently used directly for other new projects.
+> This project is built on the Starlette framework and can be considered a comprehensive backend project template. The main advantage is that it can be conveniently used directly for other new projects..
+
+## Installation
+
+clone:
+```
+$ git clone https://github.com/sungeer/viper.git
+$ cd viper
+```
+create & activate virtual env then install dependency:
+
+with venv + pip:
+```
+$ python -m venv venv
+$ source venv/bin/activate  # use `venv\Scripts\activate` on Windows
+$ pip install -r requirements.txt
+```
+
+run:
+```
+$ granian --interface wsgi viper:app
+* Running on http://127.0.0.1:8000/
+```
+
+## License
+
+This project is licensed under the MIT License (see the
+[LICENSE](LICENSE) file for details).
