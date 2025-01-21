@@ -5,7 +5,7 @@ import MySQLdb
 from MySQLdb.cursors import DictCursor
 from dbutils.pooled_db import PooledDB
 
-from viper.configs import settings
+from viper.core import settings
 
 dbpool = PooledDB(
     creator=MySQLdb,

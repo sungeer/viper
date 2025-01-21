@@ -1,6 +1,6 @@
 import httpx
 
-from viper.configs import settings
+from viper.core import settings
 
 limits = httpx.Limits(
     max_keepalive_connections=settings.httpx_pool_size,

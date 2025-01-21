@@ -3,7 +3,7 @@ from base64 import b64encode, b64decode
 from Crypto.Cipher import AES  # pip install pycryptodome
 from Crypto.Util.Padding import pad, unpad
 
-from viper.configs import settings
+from viper.core import settings
 
 
 class AESCipher:

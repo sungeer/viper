@@ -1,6 +1,6 @@
 import redis.asyncio as redis
 
-from viper.configs import settings
+from viper.core import settings
 from viper.utils.pwd_util import cipher
 
 

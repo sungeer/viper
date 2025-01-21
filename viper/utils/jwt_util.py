@@ -5,7 +5,7 @@ import jwt  # python -m pip install pyjwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from starlette.authentication import AuthenticationError
 
-from viper.configs import settings
+from viper.core import settings
 from viper.utils.errors import TokenExpiredError
 
 

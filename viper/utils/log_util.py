@@ -3,7 +3,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from viper.configs import settings
+from viper.core import settings
 
 # log_dir = Path(settings.basedir).joinpath(f'logs/{settings.app_name}')
 log_dir = Path(settings.basedir).joinpath('logs')
