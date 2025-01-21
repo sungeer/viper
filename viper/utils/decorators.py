@@ -1,7 +1,7 @@
 from functools import wraps
 
+from viper.schemas import validator
 from viper.utils.resp_util import abort
-from viper.utils.schemas import validate_data
 from viper.utils.pools import run_in_thread_pool_db
 
 
@@ -10,7 +10,7 @@ def validate_request(schema):
         @wraps(func)
         async def decorated_function(request, *args, **kwargs):
             data = await request.json()
-            validate_data(data, schema)
+            validator(data, schema)
             return await func(request, *args, **kwargs)
 
         return decorated_function

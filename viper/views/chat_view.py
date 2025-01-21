@@ -4,16 +4,15 @@ import httpx
 from starlette.authentication import requires
 from starlette.responses import StreamingResponse
 
-from viper.configs import settings
 from viper.utils import tools, json_util
 from viper.utils.http_util import httpx_common, httpx_stream
-from viper.utils.resp_util import jsonify, abort
+from viper.utils.resp_util import jsonify
 from viper.utils.log_util import logger
-from viper.utils.decorators import validate_request
 from viper.models.chat_model import ChatModel
 from viper.models.message_model import MessageModel
 from viper.models.content_model import ContentModel
-from viper.utils.schemas import chat_id_schema, send_message_schema, get_messages_schema
+from viper.schemas import validator
+from viper.schemas.chat_schema import chat_id_schema, send_message_schema, get_messages_schema
 
 headers = {
     'Content-Type': 'application/json',
@@ -23,10 +22,10 @@ headers = {
 
 
 @requires('authenticated')
-@validate_request(chat_id_schema)
 async def get_chat_id(request):
     body = await request.json()
-    title = body.get('title')
+    body = validator(body, chat_id_schema)
+    title = body['title']
 
     url = f'{settings.ai_url}/v1/oapi/agent/chat/conversation/create'
     data = {
@@ -91,11 +90,11 @@ async def stream_data(conversation_id, chat_id, trace_id, content):
 
 
 @requires('authenticated')
-@validate_request(send_message_schema)
 async def send_message(request):
     body = await request.json()
-    conversation_id = body.get('conversation_id')
-    content = body.get('content')
+    body = validator(body, send_message_schema)
+    conversation_id = body['conversation_id']
+    content = body['content']
 
     trace_id = tools.generate_uuid()
     chat_info = ChatModel().get_chat_by_conversation(conversation_id)
@@ -118,10 +117,10 @@ async def get_chats(request):
 
 # 所有问答
 @requires(['authenticated', 'admin'])
-@validate_request(get_messages_schema)
 async def get_messages(request):
     body = await request.json()
-    conversation_id = body.get('conversation_id')
+    body = validator(body, get_messages_schema)
+    conversation_id = body['conversation_id']
 
     chats = MessageModel().get_messages(conversation_id)
     return jsonify(chats)
