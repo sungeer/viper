@@ -3,8 +3,8 @@ import httpx
 from viper.core import settings
 
 limits = httpx.Limits(
-    max_keepalive_connections=settings.httpx_pool_size,
-    max_connections=settings.httpx_max_overflow
+    max_keepalive_connections=settings.CONF('POOL_SIZE_COMMON', cast=int),
+    max_connections=settings.CONF('MAX_OVERFLOW_COMMON', cast=int)
 )
 
 timeout = httpx.Timeout(
@@ -18,8 +18,8 @@ httpx_common = httpx.AsyncClient(limits=limits, timeout=timeout)
 
 # 流式
 limits = httpx.Limits(
-    max_keepalive_connections=settings.stream_pool_size,
-    max_connections=settings.stream_max_overflow
+    max_keepalive_connections=settings.CONF('POOL_SIZE_STREAM', cast=int),
+    max_connections=settings.CONF('MAX_OVERFLOW_STREAM', cast=int)
 )
 
 timeout = httpx.Timeout(

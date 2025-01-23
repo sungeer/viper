@@ -5,12 +5,11 @@ from loguru import logger
 
 from viper.core import settings
 
-# log_dir = Path(settings.basedir).joinpath(f'logs/{settings.app_name}')
-log_dir = Path(settings.basedir).joinpath('logs')
+log_dir = Path(settings.BASE_DIR) / 'logs'
 log_dir.mkdir(parents=True, exist_ok=True)
 
-access_path = log_dir.joinpath('access.log')  # 'logs/access.log'
-error_path = log_dir.joinpath('error.log')
+access_path = log_dir / 'access.log'
+error_path = log_dir / 'error.log'
 
 logger.remove()
 

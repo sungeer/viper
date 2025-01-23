@@ -20,16 +20,16 @@ def validate_password(plain_password, hashed_password):
 
 def generate_token(data: dict):
     token_data = data.copy()  # data = {'id': 3}
-    expiration_delta = timedelta(minutes=settings.access_token_expire_minutes)
+    expiration_delta = timedelta(minutes=settings.CONF('EXPIRE_MINUTES'))
     expiration_time = datetime.now() + expiration_delta
     token_data.update({'exp': expiration_time.timestamp()})
-    encoded_token = jwt.encode(token_data, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
+    encoded_token = jwt.encode(token_data, settings.CONF('SECRET_KEY'), algorithm=settings.CONF('ALGORITHM'))
     return encoded_token
 
 
 def verify_token(token: str):
-    secret_key = settings.jwt_secret_key
-    jwt_algorithm = settings.jwt_algorithm
+    secret_key = settings.CONF('SECRET_KEY')
+    jwt_algorithm = settings.CONF('ALGORITHM')
 
     try:
         payload = jwt.decode(token, secret_key, algorithms=[jwt_algorithm])

@@ -4,12 +4,12 @@ from viper.core import settings
 from viper.utils.pwd_util import cipher
 
 
-def redis_conn(host=settings.redis_host, port=6379, db=0, decode_responses=False):
+def redis_conn(host=settings.CONF('REDIS_HOST'), port=6379, db=0, decode_responses=False):
     return redis.Redis(
         host=host,
         port=port,
         db=db,
-        password=settings.redis_pass,  # password=cipher.decrypt(settings.redis_pass),
+        password=settings.CONF('REDIS_PWD'),  # password=cipher.decrypt(settings.redis_pass),
         decode_responses=decode_responses
     )
 

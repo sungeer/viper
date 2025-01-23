@@ -30,7 +30,7 @@ class AESCipher:
         return pt.decode('utf-8')
 
 
-key = settings.sec_key
+key = settings.CONF('SECRET_KEY')
 cipher = AESCipher(key)
 
 if __name__ == '__main__':
