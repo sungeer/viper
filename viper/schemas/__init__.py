@@ -36,4 +36,4 @@ def validator(data, schema, check_format=None):
         validate(instance=data, schema=schema)
         return data
     except ValidationException as exc:
-        raise ValidationError(exc)
+        raise ValidationError(exc.message)

@@ -1,6 +1,12 @@
 class ValidationError(Exception):
-    pass
+
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)
 
 
 class TokenExpiredError(Exception):
-    pass
+
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)
