@@ -20,7 +20,7 @@ def validate_password(plain_password, hashed_password):
 
 def generate_token(data: dict):
     token_data = data.copy()  # data = {'id': 3}
-    expiration_delta = timedelta(minutes=settings.CONF('EXPIRE_MINUTES'))
+    expiration_delta = timedelta(minutes=settings.CONF('EXPIRE_MINUTES', cast=int))
     expiration_time = datetime.now() + expiration_delta
     token_data.update({'exp': expiration_time.timestamp()})
     encoded_token = jwt.encode(token_data, settings.CONF('SECRET_KEY'), algorithm=settings.CONF('ALGORITHM'))

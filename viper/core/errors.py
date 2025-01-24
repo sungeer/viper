@@ -9,7 +9,7 @@ from viper.utils.errors import ValidationError, TokenExpiredError
 
 async def validation_exception_handler(request: Request, exc: ValidationError):
     logger.opt(exception=True).warning(exc)
-    return jsonify_exc(422, exc.args)
+    return jsonify_exc(422, exc)
 
 
 async def jwt_expired_exception_handler(request: Request, exc: TokenExpiredError):

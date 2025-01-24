@@ -46,7 +46,7 @@ class JWTAuthBackend(AuthenticationBackend):
             return None
 
         user_id = jwt_util.verify_token(token)
-        db_user = UserModel().get_user_by_id(user_id)
+        db_user = await UserModel().get_user_by_id(user_id)
         username = db_user['name']
         phone = db_user['phone']
         is_admin = db_user['is_admin']

@@ -1,7 +1,7 @@
 access_token_schema = {
     'type': 'object',
     'properties': {
-        'phone': {
+        'phone_number': {
             'type': 'string',
             'pattern': r'^1[3-9]\d{9}$'  # 中国大陆手机号码正则
         },
@@ -11,5 +11,5 @@ access_token_schema = {
             'maxLength': 12  # 密码最大长度
         }
     },
-    'required': ['phone', 'password']  # 必填字段
+    'required': ['phone_number', 'password']  # 必填字段
 }
