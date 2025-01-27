@@ -6,8 +6,6 @@ from binascii import a2b_hex
 import httpx
 from Crypto.Cipher import AES  # pip install pycryptodomex
 
-from viper.utils.log_util import logger
-
 
 class ConfigDetector:
 
@@ -49,11 +47,7 @@ class ConfigDetector:
             'group': group,
         }
         response = httpx.get(url, params=params, timeout=30.0)
-        if response.status_code == 200:
-            return response.text
-        else:
-            logger.error(f'Failed to nacos: {response.status_code}, {response.text}')
-            raise
+        return response.text
 
     def get_conf(self, section='DEFAULT', key='DEFAULT'):
         value = self.config.get(section, key)
