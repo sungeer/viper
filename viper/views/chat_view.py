@@ -17,8 +17,8 @@ from viper.schemas.chat_schema import chat_id_schema, send_message_schema, get_m
 
 headers = {
     'Content-Type': 'application/json',
-    'Access-key': settings.CONF('API_KEY'),
-    'Workspace-Id': settings.CONF('WORKSPACE_ID')
+    'Access-key': settings.CONF.get_conf('AI', 'API_KEY'),
+    'Workspace-Id': settings.CONF.get_conf('AI', 'WORKSPACE_ID')
 }
 
 
@@ -28,9 +28,9 @@ async def get_chat_id(request):
     body = validator(body, chat_id_schema)
     title = body['title']
 
-    url = f'{settings.CONF('URL')}/v1/oapi/agent/chat/conversation/create'
+    url = f'{settings.CONF.get_conf('AI', 'URL')}/v1/oapi/agent/chat/conversation/create'
     data = {
-        'robot_id': settings.CONF('ROBOT_ID'),
+        'robot_id': settings.CONF.get_conf('AI', 'ROBOT_ID'),
         'user': 'wangxun',
         'title': title
     }
@@ -46,9 +46,9 @@ async def get_chat_id(request):
 
 
 async def get_response(conversation_id, content):
-    url = f'{settings.CONF('URL')}/v1/oapi/agent/chat'
+    url = f'{settings.CONF.get_conf('AI', 'URL')}/v1/oapi/agent/chat'
     data = {
-        'robot_id': settings.CONF('ROBOT_ID'),
+        'robot_id': settings.CONF.get_conf('AI', 'ROBOT_ID'),
         'conversation_id': conversation_id,
         'content': content,
         'response_mode': 'streaming'
@@ -97,7 +97,7 @@ async def send_message(request):
     conversation_id = body['conversation_id']
     content = body['content']
 
-    trace_id = tools.generate_uuid()
+    trace_id = tools.generate_random_id()
     chat_info = await ChatModel().get_chat_by_conversation(conversation_id)
     chat_id = chat_info['ID']
 

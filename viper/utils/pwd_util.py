@@ -30,8 +30,8 @@ class AESCipher:
         return pt.decode('utf-8')
 
 
-key = settings.CONF('SECRET_KEY')
-cipher = AESCipher(key)
+secret_key = settings.CONF.get_conf('JWT', 'SEC_KEY')
+cipher = AESCipher(secret_key)
 
 if __name__ == '__main__':
     import secrets

@@ -4,10 +4,9 @@ from Crypto.Util.Padding import pad
 from Crypto.Cipher import AES  # pip install pycryptodomex
 
 
-def encrypt_data(plaintext, seckey):
-    if len(seckey) not in [16, 24, 32]:
-        raise ValueError(f'The length of the seckey must be 16, 24, or 32, it cannot be {len(seckey)}.')
-
+def encrypt_sec(plaintext, seckey):
+    if len(seckey) not in [16, 32]:
+        raise ValueError(f'The length of the seckey must be 16, or 32, it cannot be {len(seckey)}.')
     plaintext_padded = pad(plaintext.encode(), AES.block_size)
     aes = AES.new(seckey.encode(), AES.MODE_ECB)
     encrypted_data = aes.encrypt(plaintext_padded)
@@ -15,4 +14,7 @@ def encrypt_data(plaintext, seckey):
 
 
 if __name__ == '__main__':
-    pass
+    pt = 'admin'
+    sk = '1f2095a2ec0cefd2c2ab9dd258ad22c3'
+    es = encrypt_sec(pt, sk)
+    print(es)

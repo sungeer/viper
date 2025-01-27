@@ -1,15 +1,14 @@
 import redis.asyncio as redis
 
 from viper.core import settings
-from viper.utils.pwd_util import cipher
 
 
-def redis_conn(host=settings.CONF('REDIS_HOST'), port=6379, db=0, decode_responses=False):
+def redis_conn(host=settings.CONF.get_conf('REDIS', 'HOST'), port=6379, db=0, decode_responses=False):
     return redis.Redis(
         host=host,
         port=port,
         db=db,
-        password=settings.CONF('REDIS_PWD'),  # password=cipher.decrypt(settings.redis_pass),
+        # password=settings.CONF.get_sec_conf('REDIS', 'PASSWD'),
         decode_responses=decode_responses
     )
 

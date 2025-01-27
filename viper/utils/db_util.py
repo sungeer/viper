@@ -10,12 +10,12 @@ from viper.core import settings
 dbpool = PooledDB(
     creator=MySQLdb,
     maxcached=5,
-    host=settings.CONF('HOST'),
-    port=settings.CONF('PORT', cast=int),
-    db=settings.CONF('NAME'),
-    user=settings.CONF('USER'),
-    passwd=settings.CONF('PWD'),
-    charset='utf8',
+    host=settings.CONF.get_conf('DATABASE', 'HOST'),
+    port=settings.CONF.get_int_conf('DATABASE', 'PORT'),
+    db=settings.CONF.get_conf('DATABASE', 'NAME'),
+    user=settings.CONF.get_conf('DATABASE', 'USER'),
+    passwd=settings.CONF.get_sec_conf('DATABASE', 'PASSWD'),
+    charset='utf8mb4',
     cursorclass=DictCursor
 )
 
