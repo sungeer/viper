@@ -13,5 +13,4 @@ redis_pool = ConnectionPool(
 
 huey = RedisHuey(settings.CONF.get_conf('APP', 'NAME'), connection_pool=redis_pool, blocking=True)
 
-# 在消费者 启动时 加载 定时任务
-from viper.delays import schedules  # noqa
+from viper.delays import schedules  # noqa 在消费者 启动时 加载 定时任务
