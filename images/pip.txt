@@ -16,3 +16,4 @@ python -m pip install bcrypt
 python -m pip install pyjwt
 python -m pip install pycryptodome
 python -m pip install jsonschema
+python -m pip install huey
