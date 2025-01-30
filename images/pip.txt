@@ -17,3 +17,6 @@ python -m pip install pyjwt
 python -m pip install pycryptodome
 python -m pip install jsonschema
 python -m pip install huey
+
+
+huey_consumer viper.delays.huey_instance.huey
