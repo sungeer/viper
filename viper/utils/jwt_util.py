@@ -3,10 +3,9 @@ from datetime import datetime, timedelta
 import bcrypt  # python -m pip install bcrypt
 import jwt  # python -m pip install pyjwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
-from starlette.authentication import AuthenticationError
 
 from viper.core import settings
-from viper.utils.errors import TokenExpiredError
+from viper.utils.errors import TokenExpiredError, AuthFailureError
 
 
 def set_password(password):
@@ -37,9 +36,9 @@ def verify_token(token: str):
         payload = jwt.decode(token, secret_key, algorithms=[jwt_algorithm])
         user_id = payload.get('id')
         if not user_id:
-            raise AuthenticationError('Invalid JWT: missing field id')
+            raise AuthFailureError('Invalid JWT: missing field id')
     except ExpiredSignatureError:
         raise TokenExpiredError('Token has expired')
     except InvalidTokenError as exc:
-        raise AuthenticationError(f'Invalid token: {str(exc)}')
+        raise AuthFailureError(f'Invalid token: {str(exc)}')
     return user_id
