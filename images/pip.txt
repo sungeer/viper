@@ -19,4 +19,12 @@ python -m pip install jsonschema
 python -m pip install huey
 
 
+python -m pip install granian
+
+granian --interface wsgi krathon:app
+
+granian --interface wsgi --workers 1 --threads 4 krathon:app
+
+
+
 huey_consumer viper.delays.huey_instance.huey
