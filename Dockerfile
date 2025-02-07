@@ -1,26 +1,23 @@
 FROM python:3.12-slim
 
-RUN groupadd -r greybook && useradd -r -g greybook greybook
+RUN groupadd -r viper && useradd -r -g viper viper
 
-WORKDIR /home/greybook
+WORKDIR /home/viper
 
 COPY pyproject.toml pdm.lock ./
 RUN pip install -U pdm
 ENV PDM_CHECK_UPDATE=false
 RUN pdm install --check --prod --no-editable
-ENV PATH="/home/greybook/.venv/bin:$PATH"
+ENV PATH="/home/viper/.venv/bin:$PATH"
 
-COPY greybook greybook
-COPY migrations migrations
-COPY uploads uploads
+COPY viper viper
 COPY app.py docker-entrypoint.sh ./
 
-RUN chown -R greybook:greybook .
-USER greybook
+RUN chown -R viper:viper .
+USER viper
 
 ENV FLASK_APP=app.py
 ENV FLASK_CONFIG=production
-ENV GREYBOOK_LOGGING_PATH=stream
 
-EXPOSE 5000
+EXPOSE 8848
 ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  web:
+    build: .
+    command: uvicorn viper:app --host 0.0.0.0 --port 8848
+    volumes:
+      - ./app:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+  worker:
+    build: .
+    command: bash start_huey.sh
+    volumes:
+      - ./app:/app
+    environment:
+      - RUN_HUEY=true  # 仅在目标服务器上设置
+    depends_on:
+      - redis
+  redis:
+    image: "redis:alpine"
