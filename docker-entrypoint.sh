@@ -1,9 +1,5 @@
 #!/bin/bash
+set -e
 
-# 检查是否为目标服务器
-if [ "$RUN_HUEY" = "true" ]; then
-    # 启动 Huey worker
-    huey_consumer viper.delays.huey_instance.huey
-else
-    echo "Huey is not configured to run on this server."
-fi
+# start Gunicorn
+exec gunicorn --workers 4 --bind 0.0.0.0:5000 --access-logfile - --error-logfile - app:app
