@@ -4,7 +4,7 @@
 
 > This project is built on the Starlette framework and can be considered a comprehensive backend project template. The main advantage is that it can be conveniently used directly for other new projects.
 
-No Pydantic, no Swagger, no Type Hints, no ORM, no aiomysql, and so on, nothing that is poorly maintained or unstable is referenced.
+No Pydantic, no aiomysql, and so on, nothing that is poorly maintained or unstable is referenced.
 
 ## Installation
 
