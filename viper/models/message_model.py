@@ -2,9 +2,9 @@ from viper.models.base_model import BaseModel
 from viper.utils.decorators import sync_to_async_db
 
 
-@sync_to_async_db
 class MessageModel(BaseModel):
 
+    @sync_to_async_db
     def add_message(self, chat_id, trace_id, sender):
         sql_str = '''
             INSERT INTO 
@@ -20,6 +20,7 @@ class MessageModel(BaseModel):
         self.close()
         return lastrowid
 
+    @sync_to_async_db
     def get_messages(self, chat_id):
         sql_str = '''
             SELECT

@@ -2,9 +2,9 @@ from viper.models.base_model import BaseModel
 from viper.utils.decorators import sync_to_async_db
 
 
-@sync_to_async_db
 class ContentModel(BaseModel):
 
+    @sync_to_async_db
     def add_content(self, message_id, content):
         sql_str = '''
             INSERT INTO 

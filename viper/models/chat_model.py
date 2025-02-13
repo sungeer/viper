@@ -2,9 +2,9 @@ from viper.models.base_model import BaseModel
 from viper.utils.decorators import sync_to_async_db
 
 
-@sync_to_async_db
 class ChatModel(BaseModel):
 
+    @sync_to_async_db
     def add_chat(self, conversation_id, title, user_id):
         sql_str = '''
             INSERT INTO 
@@ -21,6 +21,7 @@ class ChatModel(BaseModel):
         self.close()
         return lastrowid
 
+    @sync_to_async_db
     def get_chats(self, user_id):
         sql_str = '''
             SELECT
@@ -37,6 +38,7 @@ class ChatModel(BaseModel):
         self.close()
         return chats
 
+    @sync_to_async_db
     def get_chat_by_conversation(self, conversation_id):
         sql_str = '''
             SELECT 
