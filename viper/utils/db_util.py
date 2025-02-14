@@ -25,6 +25,33 @@ def create_dbconn():
     return conn
 
 
+class DBConnection:
+    def __init__(self):
+        self.dbconn = None
+        self.cursor = None
+
+    def commit(self):
+        self.dbconn.commit()
+
+    def __enter__(self):
+        if not self.dbconn:
+            self.dbconn = create_dbconn()
+        if not self.cursor:
+            self.cursor = self.dbconn.cursor()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            if self.cursor:
+                self.cursor.execute('UNLOCK TABLES;')
+                self.cursor.close()
+            if self.dbconn:
+                self.dbconn.close()
+        finally:
+            self.dbconn = None
+            self.cursor = None
+
+
 class Common:
 
     @staticmethod
