@@ -4,7 +4,7 @@ from pathlib import Path
 from binascii import a2b_hex
 
 import httpx
-from Crypto.Cipher import AES  # pip install pycryptodomex
+from Crypto.Cipher import AES  # pip install pycryptodome
 
 
 class ConfigDetector:
